@@ -53,10 +53,10 @@ void AgeBasedLayer::updateBoundsFromPeople(double* min_x, double* min_y, double*
     {
         hri_msgs::Person person = transformed_people_[i];
         double radius = adult_radius_;
-        if (people_list_.people[i].id == 0){
+        if (people_list_.people[i].type == 0){
             radius = adult_radius_;
         }
-        else if (people_list_.people[i].id == 1){
+        else if (people_list_.people[i].type == 1){
             radius = child_radius_;
         }
 
@@ -84,10 +84,10 @@ void AgeBasedLayer::updateCosts(costmap_2d::Costmap2D& master_grid, int min_i, i
   {
     hri_msgs::Person person = transformed_people_[i];
     double rad = adult_radius_;
-    if (people_list_.people[i].id == 0){
+    if (people_list_.people[i].type == 0){
         rad = adult_radius_;
     }
-    else if (people_list_.people[i].id == 1){
+    else if (people_list_.people[i].type == 1){
         rad = child_radius_;
     }
 

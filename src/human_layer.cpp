@@ -18,7 +18,7 @@ void HumanLayer::onInitialize()
   ros::NodeHandle nh("~/" + name_), g_nh;
   current_ = true;
   first_time_ = true;
-  people_sub_ = nh.subscribe("/person_locations", 1, &HumanLayer::peopleCallback, this);
+  people_sub_ = nh.subscribe("/tracked_people", 1, &HumanLayer::peopleCallback, this);
 }
 
 void HumanLayer::peopleCallback(const hri_msgs::PersonArray& people)
@@ -53,6 +53,15 @@ void HumanLayer::updateBounds(double origin_x, double origin_y, double origin_z,
       tpt.pose.position.x = opt.point.x;
       tpt.pose.position.y = opt.point.y;
       tpt.pose.position.z = opt.point.z;
+
+      pt.point.x += person.velocity.x;
+      pt.point.y += person.velocity.y;
+      pt.point.z += person.velocity.z;
+      tf_->transform(pt, opt, global_frame);
+
+      tpt.velocity.x = opt.point.x - tpt.pose.position.x;
+      tpt.velocity.y = opt.point.y - tpt.pose.position.y;
+      tpt.velocity.z = opt.point.z - tpt.pose.position.z;
 
       transformed_people_.push_back(tpt);
     }
