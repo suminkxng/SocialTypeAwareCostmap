@@ -19,6 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
 generate_dynamic_reconfigure_options(
   cfg/AgeBasedLayer.cfg  
   cfg/PredictionLayer.cfg
+  cfg/GroupBasedLayer.cfg
 )
 
 catkin_package(
@@ -36,7 +37,9 @@ include_directories(
 add_library(social_costmap
   src/prediction_layer.cpp
   src/human_layer.cpp
+  src/group_layer.cpp
   src/age_based_layer.cpp
+  src/group_based_layer.cpp
 )
 
 ## Add cmake target dependencies of the library

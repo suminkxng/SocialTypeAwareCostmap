@@ -9,4 +9,9 @@
       AgeBasedLayer
     </description>
   </class>
+  <class type="social_costmap::GroupBasedLayer" base_class_type="costmap_2d::Layer">
+    <description>
+      GroupBasedLayer
+    </description>
+  </class>
 </library>
