@@ -1,33 +1,16 @@
 #include <social_costmap/age_based_layer.h>
 #include <math.h>
-#include <angles/angles.h> // 각도 관련 연산을 위한 라이브러리
-#include <pluginlib/class_list_macros.h> // ROS 플러그인을 동적으로 로드하기 위한 매크로
+#include <angles/angles.h>
+#include <pluginlib/class_list_macros.h>
 #include <algorithm>
 #include <list>
 #include <tf/transform_datatypes.h>
 
-PLUGINLIB_EXPORT_CLASS(social_costmap::AgeBasedLayer, costmap_2d::Layer) // 클래스를 플러그인으로서 노출
+PLUGINLIB_EXPORT_CLASS(social_costmap::AgeBasedLayer, costmap_2d::Layer)
 
 using costmap_2d::NO_INFORMATION;
 using costmap_2d::LETHAL_OBSTACLE;
 using costmap_2d::FREE_SPACE;
-
-double gaussian(double x, double y, double x0, double y0, double A, double varx, double vary, double skew)
-{
-  double dx = x - x0, dy = y - y0;
-  double h = sqrt(dx * dx + dy * dy);
-  double angle = atan2(dy, dx);
-  double mx = cos(angle - skew) * h;
-  double my = sin(angle - skew) * h;
-  double f1 = pow(mx, 2.0) / (2.0 * varx),
-         f2 = pow(my, 2.0) / (2.0 * vary);
-  return A * exp(-(f1 + f2));
-}
-
-double get_radius(double cutoff, double A, double var)
-{
-  return sqrt(-2 * var * log(cutoff / A));
-}
 
 
 namespace social_costmap
@@ -43,31 +26,33 @@ void AgeBasedLayer::onInitialize()
 
 void AgeBasedLayer::updateBoundsFromPeople(double* min_x, double* min_y, double* max_x, double* max_y)
 {
-  std::vector<hri_msgs::Person>::iterator p_it;
+  // std::vector<hri_msgs::Person>::iterator p_it;
 
-    for (size_t i = 0; i < transformed_people_.size(); ++i)
-    {
-      hri_msgs::Person person = transformed_people_[i];
+  for (size_t i = 0; i < transformed_people_.size(); ++i)
+  {
+    hri_msgs::Person person = transformed_people_[i];
 
-      double mag = sqrt(pow(person.velocity.x, 2) + pow(person.velocity.y, 2));
-      double factor = 1.0 + mag * factor_;
+    double mag = sqrt(pow(person.velocity.x, 2) + pow(person.velocity.y, 2));
+    double factor = 1.0 + mag * factor_;
 
-      double covar = covar_;
-      
-      if (people_list_.people[i].type == 0){
-        covar = adult_covar_;
-      }
-      else if (people_list_.people[i].type == 1){
-        covar = child_covar_;
-      }
-
-      double point = get_radius(cutoff_, amplitude_, covar * factor);
-
-      *min_x = std::min(*min_x, person.pose.position.x - point);
-      *min_y = std::min(*min_y, person.pose.position.y - point);
-      *max_x = std::max(*max_x, person.pose.position.x + point);
-      *max_y = std::max(*max_y, person.pose.position.y + point);
+    double covar = covar_;
+    
+    if (people_list_.people[i].type == 0){
+      covar = adult_covar_;
     }
+    else if (people_list_.people[i].type == 1){
+      covar = child_covar_;
+    }
+    else if (people_list_.people[i].type == 3)
+      return;
+
+    double point = get_radius(cutoff_, amplitude_, covar * factor);
+
+    *min_x = std::min(*min_x, person.pose.position.x - point);
+    *min_y = std::min(*min_y, person.pose.position.y - point);
+    *max_x = std::max(*max_x, person.pose.position.x + point);
+    *max_y = std::max(*max_y, person.pose.position.y + point);
+  }
 }
 
 void AgeBasedLayer::updateCosts(costmap_2d::Costmap2D& master_grid, int min_i, int min_j, int max_i, int max_j)
@@ -80,7 +65,7 @@ void AgeBasedLayer::updateCosts(costmap_2d::Costmap2D& master_grid, int min_i, i
   if (cutoff_ >= amplitude_)
     return;
 
-  std::vector<hri_msgs::Person>::iterator p_it;
+  // std::vector<hri_msgs::Person>::iterator p_it;
   costmap_2d::Costmap2D* costmap = layered_costmap_->getCostmap();
   double res = costmap->getResolution();
 
@@ -98,6 +83,9 @@ void AgeBasedLayer::updateCosts(costmap_2d::Costmap2D& master_grid, int min_i, i
     else if (people_list_.people[i].type == 1){
       covar = child_covar_;
     }
+    else if (people_list_.people[i].type == 3)
+      return;
+
     double base = get_radius(cutoff_, amplitude_, covar);
     double point = get_radius(cutoff_, amplitude_, covar * factor);
 

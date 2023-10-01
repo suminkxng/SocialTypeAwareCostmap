@@ -40,14 +40,6 @@ protected:
   bool first_time_;
   double last_min_x_, last_min_y_, last_max_x_, last_max_y_;
 
-  double Gaussian2D(double x, double y, double x0, double y0, double A, double varx, double vary) {
-    double dx = x - x0;
-    double dy = y - y0;
-    double f1 = pow(dx, 2.0) / (2.0 * varx);
-    double f2 = pow(dy, 2.0) / (2.0 * vary);
-    return A * exp(-(f1 + f2));
-  }
-
 };
 }  // namespace social_costmap
 
