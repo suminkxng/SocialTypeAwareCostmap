@@ -32,10 +32,9 @@ double computeGroupSize(const std::vector<hri_msgs::Person>& group, const geomet
     // ROS_INFO("Person position: (%f, %f), Group center: (%f, %f), Distance: %f", person.pose.position.x, person.pose.position.y, center.x, center.y, distance);
     max_distance = std::max(max_distance, distance);
   }
-  // ROS_INFO("Computed group size: %f", max_distance);
+
   return max_distance;
 }
-
 
 geometry_msgs::Vector3 computeGroupVelocityAndDirection(const std::vector<hri_msgs::Person>& group) {
     geometry_msgs::Vector3 avg_velocity;
@@ -89,12 +88,18 @@ void GroupBasedLayer::updateBoundsFromPeople(double* min_x, double* min_y, doubl
 
     for(const auto& group : groups) {
         geometry_msgs::Point group_center = computeGroupCenter(group);
-        double group_size = 5.0;
+        geometry_msgs::Vector3 group_velocity = computeGroupVelocityAndDirection(group);
+        double mag = sqrt(pow(group_velocity.x, 2) + pow(group_velocity.y, 2));
+        double factor = 1.0 + mag * factor_;
 
-        *min_x = std::min(*min_x, group_center.x - group_size);
-        *min_y = std::min(*min_y, group_center.y - group_size);
-        *max_x = std::max(*max_x, group_center.x + group_size);
-        *max_y = std::max(*max_y, group_center.y + group_size);
+        double covar = covar_;
+        auto group_size = computeGroupSize(group, group_center);
+        double point = get_radius(cutoff_, amplitude_, covar_ * factor * group_size * group_factor_);
+
+        *min_x = std::min(*min_x, group_center.x - point);
+        *min_y = std::min(*min_y, group_center.y - point);
+        *max_x = std::max(*max_x, group_center.x + point);
+        *max_y = std::max(*max_y, group_center.y + point);
     }
 }
 
@@ -102,7 +107,7 @@ void GroupBasedLayer::updateCostForGroup(const std::vector<hri_msgs::Person>& gr
 {
     // ROS_INFO("updateCostForGroup called");
     geometry_msgs::Point group_center = computeGroupCenter(group);
-
+    auto group_size = computeGroupSize(group, group_center);
     geometry_msgs::Vector3 group_velocity = computeGroupVelocityAndDirection(group);
     double angle = atan2(group_velocity.y, group_velocity.x);
 
@@ -111,7 +116,9 @@ void GroupBasedLayer::updateCostForGroup(const std::vector<hri_msgs::Person>& gr
     double covar = covar_;
 
     double base = get_radius(cutoff_, amplitude_, covar);
-    double point = get_radius(cutoff_, amplitude_, covar * factor);
+    double point = get_radius(cutoff_, amplitude_, covar * factor * group_size * group_factor_);
+    unsigned int width = std::max(1, static_cast<int>((base + point) / res)),
+                 height = std::max(1, static_cast<int>((base + point) / res));
 
     // Use group center as the center for Gaussian
     double cx = group_center.x, cy = group_center.y;
@@ -128,9 +135,6 @@ void GroupBasedLayer::updateCostForGroup(const std::vector<hri_msgs::Person>& gr
         ox = cx + (point - base) * cos(angle) - base;
     int dx, dy;
     costmap.worldToMapNoBounds(ox, oy, dx, dy);
-    double group_size = 5.0;
-    double width = ceil(group_size / res);  // 셀의 개수로 변환 (올림 처리)
-    double height = ceil(group_size / res);  // 셀의 개수로 변환 (올림 처리)
 
     int start_x = 0, start_y = 0, end_x = width, end_y = height;
     if (dx < 0)
@@ -204,6 +208,7 @@ void GroupBasedLayer::configure(GroupBasedLayerConfig &config, uint32_t level)
   amplitude_ = config.amplitude;
   cutoff_ = config.cutoff;
   factor_ = config.factor;
+  group_factor_ = config.group_size_factor;
   enabled_ = config.enabled;
 }
 };  // namespace social_costmap

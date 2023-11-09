@@ -26,7 +26,7 @@ public:
 
 protected:
   void configure(GroupBasedLayerConfig &config, uint32_t level);
-  double cutoff_, amplitude_, covar_, radius_, factor_;
+  double cutoff_, amplitude_, covar_, radius_, factor_, group_factor_;
   dynamic_reconfigure::Server<GroupBasedLayerConfig>* server_;
   dynamic_reconfigure::Server<GroupBasedLayerConfig>::CallbackType f_;
 };
