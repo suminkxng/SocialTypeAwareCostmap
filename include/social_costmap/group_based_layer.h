@@ -2,7 +2,7 @@
 #define AGE_BASED_COSTMAP_LAYER_H_
 
 #include <ros/ros.h>
-#include <social_costmap/human_layer.h>
+#include <social_costmap/group_layer.h>
 #include <dynamic_reconfigure/server.h>
 #include <social_costmap/GroupBasedLayerConfig.h>
 
@@ -10,7 +10,7 @@ double Gaussian2D(double x, double y, double x0, double y0, double A, double var
 
 namespace social_costmap
 {
-class GroupBasedLayer : public HumanLayer
+class GroupBasedLayer : public GroupLayer
 {
 public:
   GroupBasedLayer()

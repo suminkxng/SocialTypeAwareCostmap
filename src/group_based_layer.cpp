@@ -56,7 +56,7 @@ namespace social_costmap
 {
 void GroupBasedLayer::onInitialize()
 {
-  HumanLayer::onInitialize();
+  GroupLayer::onInitialize();
   ros::NodeHandle nh("~/" + name_), g_nh;
   server_ = new dynamic_reconfigure::Server<GroupBasedLayerConfig>(nh);
   f_ = boost::bind(&GroupBasedLayer::configure, this, _1, _2);
@@ -91,10 +91,11 @@ void GroupBasedLayer::updateBoundsFromPeople(double* min_x, double* min_y, doubl
         geometry_msgs::Vector3 group_velocity = computeGroupVelocityAndDirection(group);
         double mag = sqrt(pow(group_velocity.x, 2) + pow(group_velocity.y, 2));
         double factor = 1.0 + mag * factor_;
-
-        double covar = covar_;
         auto group_size = computeGroupSize(group, group_center);
-        double point = get_radius(cutoff_, amplitude_, covar_ * factor * group_size * group_factor_);
+        double group_covar = group_size * group_factor_;
+
+        double covar = group_covar;
+        double point = get_radius(cutoff_, amplitude_, covar * factor);
 
         *min_x = std::min(*min_x, group_center.x - point);
         *min_y = std::min(*min_y, group_center.y - point);
@@ -108,15 +109,21 @@ void GroupBasedLayer::updateCostForGroup(const std::vector<hri_msgs::Person>& gr
     // ROS_INFO("updateCostForGroup called");
     geometry_msgs::Point group_center = computeGroupCenter(group);
     auto group_size = computeGroupSize(group, group_center);
+
     geometry_msgs::Vector3 group_velocity = computeGroupVelocityAndDirection(group);
     double angle = atan2(group_velocity.y, group_velocity.x);
 
     double mag = sqrt(pow(group_velocity.x, 2) + pow(group_velocity.y, 2));
     double factor = 1.0 + mag * factor_;
-    double covar = covar_;
+
+    double group_covar = group_size * group_factor_;
+
+    // ROS_INFO("Group INFO: (%f, %f)", group_size, group_covar);
+
+    double covar = group_covar;
 
     double base = get_radius(cutoff_, amplitude_, covar);
-    double point = get_radius(cutoff_, amplitude_, covar * factor * group_size * group_factor_);
+    double point = get_radius(cutoff_, amplitude_, covar * factor);
     unsigned int width = std::max(1, static_cast<int>((base + point) / res)),
                  height = std::max(1, static_cast<int>((base + point) / res));
 
