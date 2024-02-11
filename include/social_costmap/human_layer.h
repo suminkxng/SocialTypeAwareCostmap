@@ -13,7 +13,7 @@ namespace social_costmap
 class HumanLayer : public costmap_2d::Layer
 {
 public:
-  HumanLayer()
+  HumanLayer() : last_detection_time_(0), detection_delay_(3.0)  // 초기화
   {
     layered_costmap_ = NULL;
   }
@@ -39,6 +39,9 @@ protected:
   boost::recursive_mutex lock_;
   bool first_time_;
   double last_min_x_, last_min_y_, last_max_x_, last_max_y_;
+  ros::Time last_detection_time_;  // 마지막으로 사람이 감지된 시간
+  double detection_delay_;         // 사람의 위치를 유지할 시간 (초)
+  hri_msgs::PersonArray last_detected_people_;  
 
   double Gaussian2D(double x, double y, double x0, double y0, double A, double varx, double vary) {
       double dx = x - x0;
