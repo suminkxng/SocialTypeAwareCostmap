@@ -43,14 +43,6 @@ protected:
   double detection_delay_;         // 사람의 위치를 유지할 시간 (초)
   hri_msgs::PersonArray last_detected_people_;  
 
-  double Gaussian2D(double x, double y, double x0, double y0, double A, double varx, double vary) {
-      double dx = x - x0;
-      double dy = y - y0;
-      double f1 = pow(dx, 2.0) / (2.0 * varx);
-      double f2 = pow(dy, 2.0) / (2.0 * vary);
-      return A * exp(-(f1 + f2));
-  }
-
   double gaussian(double x, double y, double x0, double y0, double A, double varx, double vary, double skew) {
       double dx = x - x0, dy = y - y0;
       double h = sqrt(dx * dx + dy * dy);
