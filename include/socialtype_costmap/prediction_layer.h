@@ -6,9 +6,9 @@
 #include <costmap_2d/layered_costmap.h>
 #include <dynamic_reconfigure/server.h>
 #include <hri_msgs/TrajectoryArray.h>
-#include <social_costmap/PredictionLayerConfig.h>
+#include <socialtype_costmap/PredictionLayerConfig.h>
 
-namespace social_costmap
+namespace socialtype_costmap
 {
 
 class PredictionLayer : public costmap_2d::Layer
@@ -28,14 +28,14 @@ private:
     std::vector<hri_msgs::Person> traj_positions_;
 
 protected:
-    void configure(social_costmap::PredictionLayerConfig &config, uint32_t level);
+    void configure(socialtype_costmap::PredictionLayerConfig &config, uint32_t level);
     ros::NodeHandle nh_;
     int cost_threshold_;
     bool enabled_;
-    dynamic_reconfigure::Server<social_costmap::PredictionLayerConfig>* server_;
-    dynamic_reconfigure::Server<social_costmap::PredictionLayerConfig>::CallbackType f_;
+    dynamic_reconfigure::Server<socialtype_costmap::PredictionLayerConfig>* server_;
+    dynamic_reconfigure::Server<socialtype_costmap::PredictionLayerConfig>::CallbackType f_;
 };
 
-} // namespace social_costmap
+} // namespace socialtype_costmap
 
 #endif

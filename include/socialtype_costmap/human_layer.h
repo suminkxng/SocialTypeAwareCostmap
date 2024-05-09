@@ -8,7 +8,7 @@
 #include <boost/thread.hpp>
 #include <list>
 
-namespace social_costmap
+namespace socialtype_costmap
 {
 class HumanLayer : public costmap_2d::Layer
 {
@@ -39,8 +39,8 @@ protected:
   boost::recursive_mutex lock_;
   bool first_time_;
   double last_min_x_, last_min_y_, last_max_x_, last_max_y_;
-  ros::Time last_detection_time_;  // 마지막으로 사람이 감지된 시간
-  double detection_delay_;         // 사람의 위치를 유지할 시간 (초)
+  ros::Time last_detection_time_;
+  double detection_delay_;
   hri_msgs::PersonArray last_detected_people_;  
 
   double gaussian(double x, double y, double x0, double y0, double A, double varx, double vary, double skew) {
@@ -59,6 +59,6 @@ double get_radius(double cutoff, double A, double var) {
   }
 
 };
-}  // namespace social_costmap
+}  // namespace socialtype_costmap
 
 #endif  // HUMAN_COSTMAP_LAYER_H_

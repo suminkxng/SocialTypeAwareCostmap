@@ -1,11 +1,11 @@
-#include <social_costmap/prediction_layer.h>
+#include <socialtype_costmap/prediction_layer.h>
 #include <algorithm>
 #include <pluginlib/class_list_macros.h>
-#include <social_costmap/PredictionLayerConfig.h>
+#include <socialtype_costmap/PredictionLayerConfig.h>
 
-PLUGINLIB_EXPORT_CLASS(social_costmap::PredictionLayer, costmap_2d::Layer)
+PLUGINLIB_EXPORT_CLASS(socialtype_costmap::PredictionLayer, costmap_2d::Layer)
 
-namespace social_costmap
+namespace socialtype_costmap
 {
 
 PredictionLayer::PredictionLayer() {}
@@ -16,7 +16,7 @@ void PredictionLayer::onInitialize()
 {
     trajectory_sub_ = nh_.subscribe("/predicted_traj", 1, &PredictionLayer::trajectoryCallback, this);
     ros::NodeHandle nh("~/" + name_), g_nh;
-    server_ = new dynamic_reconfigure::Server<social_costmap::PredictionLayerConfig>(nh);
+    server_ = new dynamic_reconfigure::Server<socialtype_costmap::PredictionLayerConfig>(nh);
     f_ = boost::bind(&PredictionLayer::configure, this, _1, _2);
     server_->setCallback(f_);
 }
@@ -65,10 +65,10 @@ void PredictionLayer::updateCosts(costmap_2d::Costmap2D& master_grid, int min_i,
 }
 
 
-void PredictionLayer::configure(social_costmap::PredictionLayerConfig &config, uint32_t level)
+void PredictionLayer::configure(socialtype_costmap::PredictionLayerConfig &config, uint32_t level)
 {
     enabled_ = config.enabled;
     // cost_threshold_ = config.cost_threshold; 
 }
 
-} // namespace social_costmap
+} // namespace socialtype_costmap

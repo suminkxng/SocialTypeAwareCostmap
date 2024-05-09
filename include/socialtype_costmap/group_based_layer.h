@@ -2,13 +2,13 @@
 #define AGE_BASED_COSTMAP_LAYER_H_
 
 #include <ros/ros.h>
-#include <social_costmap/group_layer.h>
+#include <socialtype_costmap/group_layer.h>
 #include <dynamic_reconfigure/server.h>
-#include <social_costmap/GroupBasedLayerConfig.h>
+#include <socialtype_costmap/GroupBasedLayerConfig.h>
 
 double Gaussian2D(double x, double y, double x0, double y0, double A, double varx, double vary);
 
-namespace social_costmap
+namespace socialtype_costmap
 {
 class GroupBasedLayer : public GroupLayer
 {

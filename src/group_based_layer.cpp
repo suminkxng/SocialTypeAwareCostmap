@@ -1,11 +1,11 @@
-#include <social_costmap/group_based_layer.h>
+#include <socialtype_costmap/group_based_layer.h>
 #include <math.h>
 #include <angles/angles.h> 
 #include <pluginlib/class_list_macros.h> 
 #include <algorithm>
 #include <list>
 
-PLUGINLIB_EXPORT_CLASS(social_costmap::GroupBasedLayer, costmap_2d::Layer)
+PLUGINLIB_EXPORT_CLASS(socialtype_costmap::GroupBasedLayer, costmap_2d::Layer)
 
 using costmap_2d::NO_INFORMATION;
 using costmap_2d::LETHAL_OBSTACLE;
@@ -52,7 +52,7 @@ geometry_msgs::Vector3 computeGroupVelocityAndDirection(const std::vector<hri_ms
     return avg_velocity;
 }
 
-namespace social_costmap
+namespace socialtype_costmap
 {
 void GroupBasedLayer::onInitialize()
 {
@@ -218,4 +218,4 @@ void GroupBasedLayer::configure(GroupBasedLayerConfig &config, uint32_t level)
   group_factor_ = config.group_size_factor;
   enabled_ = config.enabled;
 }
-};  // namespace social_costmap
+};  // namespace socialtype_costmap

@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>social_costmap</name>
+  <name>socialtype_costmap</name>
   <version>0.0.0</version>
-  <description>The social_costmap package</description>
+  <description>The socialtype_costmap package</description>
 
-  <maintainer email="suminsk@khu.ac.kr">sumin</maintainer>
+  <maintainer email="suminkxng@gmail.com">sumin</maintainer>
 
 
   <license>TODO</license>
@@ -32,8 +32,6 @@
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>hri_msgs</exec_depend>
 
-
-  <!-- The export tag contains other, unspecified, tags -->
   <export>
     <costmap_2d plugin="${prefix}/costmap_plugins.xml" />
   </export>

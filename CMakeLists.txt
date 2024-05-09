@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(social_costmap)
+project(socialtype_costmap)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -25,7 +25,7 @@ generate_dynamic_reconfigure_options(
 catkin_package(
     CATKIN_DEPENDS costmap_2d dynamic_reconfigure geometry_msgs roscpp std_msgs hri_msgs
     INCLUDE_DIRS include
-    LIBRARIES social_costmap
+    LIBRARIES socialtype_costmap
 )
 
 include_directories(
@@ -34,7 +34,7 @@ include_directories(
 )
 
 ## Declare a C++ library
-add_library(social_costmap
+add_library(socialtype_costmap
   src/prediction_layer.cpp
   src/human_layer.cpp
   src/group_layer.cpp
@@ -50,7 +50,7 @@ add_library(social_costmap
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/social_costmap_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/socialtype_costmap_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -114,7 +114,7 @@ add_library(social_costmap
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_social_costmap.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_socialtype_costmap.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

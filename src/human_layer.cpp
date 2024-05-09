@@ -1,4 +1,4 @@
-#include <social_costmap/human_layer.h>
+#include <socialtype_costmap/human_layer.h>
 #include <math.h>
 #include <angles/angles.h>
 #include <geometry_msgs/PointStamped.h>
@@ -11,7 +11,7 @@ using costmap_2d::NO_INFORMATION;
 using costmap_2d::LETHAL_OBSTACLE;
 using costmap_2d::FREE_SPACE;
 
-namespace social_costmap
+namespace socialtype_costmap
 {
 void HumanLayer::onInitialize()
 {
@@ -103,4 +103,4 @@ void HumanLayer::updateBounds(double origin_x, double origin_y, double origin_z,
     last_max_y_ = d;
   }
 }
-};  // namespace social_costmap
+};  // namespace socialtype_costmap

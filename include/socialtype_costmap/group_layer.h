@@ -8,7 +8,7 @@
 #include <boost/thread.hpp>
 #include <list>
 
-namespace social_costmap
+namespace socialtype_costmap
 {
 class GroupLayer : public costmap_2d::Layer
 {
@@ -56,6 +56,6 @@ double get_radius(double cutoff, double A, double var) {
       return sqrt(-2 * var * log(cutoff / A));
   }
 };
-}  // namespace social_costmap
+}  // namespace socialtype_costmap
 
 #endif  // HUMAN_COSTMAP_LAYER_H_

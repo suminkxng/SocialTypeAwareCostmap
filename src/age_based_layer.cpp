@@ -1,4 +1,4 @@
-#include <social_costmap/age_based_layer.h>
+#include <socialtype_costmap/age_based_layer.h>
 #include <math.h>
 #include <angles/angles.h>
 #include <pluginlib/class_list_macros.h>
@@ -6,14 +6,14 @@
 #include <list>
 #include <tf/transform_datatypes.h>
 
-PLUGINLIB_EXPORT_CLASS(social_costmap::AgeBasedLayer, costmap_2d::Layer)
+PLUGINLIB_EXPORT_CLASS(socialtype_costmap::AgeBasedLayer, costmap_2d::Layer)
 
 using costmap_2d::NO_INFORMATION;
 using costmap_2d::LETHAL_OBSTACLE;
 using costmap_2d::FREE_SPACE;
 
 
-namespace social_costmap
+namespace socialtype_costmap
 {
 void AgeBasedLayer::onInitialize()
 {
@@ -168,4 +168,4 @@ void AgeBasedLayer::configure(AgeBasedLayerConfig &config, uint32_t level)
   factor_ = config.factor;
   enabled_ = config.enabled;
 }
-};  // namespace social_costmap
+};  // namespace socialtype_costmap

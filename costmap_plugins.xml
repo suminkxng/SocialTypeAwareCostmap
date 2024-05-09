@@ -1,15 +1,15 @@
-<library path="lib/libsocial_costmap">
-  <class type="social_costmap::PredictionLayer" base_class_type="costmap_2d::Layer">
+<library path="lib/libsocialtype_costmap">
+  <class type="socialtype_costmap::PredictionLayer" base_class_type="costmap_2d::Layer">
     <description>
       A layer that uses predicted trajectories to influence the costmap.
     </description>
   </class>
-  <class type="social_costmap::AgeBasedLayer" base_class_type="costmap_2d::Layer">
+  <class type="socialtype_costmap::AgeBasedLayer" base_class_type="costmap_2d::Layer">
     <description>
       AgeBasedLayer
     </description>
   </class>
-  <class type="social_costmap::GroupBasedLayer" base_class_type="costmap_2d::Layer">
+  <class type="socialtype_costmap::GroupBasedLayer" base_class_type="costmap_2d::Layer">
     <description>
       GroupBasedLayer
     </description>
